@@ -6,14 +6,6 @@ import (
 	"math"
 )
 
-var zero64 uint64
-var zero32 uint32
-
-func init() {
-	zero32 = math.Float32bits(0.0)
-	zero64 = math.Float64bits(0.0)
-}
-
 // AlmostEqual tells you how close two floats are.
 // Make maxUlpsDiff 1 if they need be really, really close.
 func AlmostEqual(a, b float64, maxUlpsDiff uint64) bool {
