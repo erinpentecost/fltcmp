@@ -47,6 +47,10 @@ func TestCases(t *testing.T) {
 	cases := []Caser{
 		Case32{2.0, 2.0, 1, true},
 		Case64{2.0, 2.0, 1, true},
+		Case32{0.0, -0.0, 1, true},
+		Case64{0.0, -0.0, 1, true},
+		Case32{1e-450, -1e-450, 2, true},
+		Case64{1e-450, -1e-450, 2, true},
 	}
 
 	for _, c := range cases {

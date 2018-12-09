@@ -6,6 +6,14 @@ import (
 	"math"
 )
 
+var zero64 uint64
+var zero32 uint32
+
+func init() {
+	zero32 = math.Float32bits(0.0)
+	zero64 = math.Float64bits(0.0)
+}
+
 // AlmostEqual tells you how close two floats are.
 // Make maxUlpsDiff 1 if they need be really, really close.
 func AlmostEqual(a, b float64, maxUlpsDiff uint64) bool {
@@ -18,9 +26,10 @@ func AlmostEqual(a, b float64, maxUlpsDiff uint64) bool {
 	uA := math.Float64bits(a)
 	uB := math.Float64bits(b)
 
-	// Fail when signs are different.
+	// Fail when signs are different?
 	if signbit64(uA) != signbit64(uB) {
-		return false
+		// Just try again after shifting everything.
+		return AlmostEqual(math.Abs(a)+math.Abs(b), 0.0, maxUlpsDiff)
 	}
 
 	// Find difference in ULPs.
@@ -51,9 +60,10 @@ func AlmostEqual32(a, b float32, maxUlpsDiff uint32) bool {
 	uA := math.Float32bits(a)
 	uB := math.Float32bits(b)
 
-	// Fail when signs are different.
+	// Fail when signs are different?
 	if signbit32(uA) != signbit32(uB) {
-		return false
+		// Just try again after shifting everything.
+		return AlmostEqual32(abs32(a)+abs32(b), 0.0, maxUlpsDiff)
 	}
 
 	// Find difference in ULPs.
@@ -70,4 +80,11 @@ func diff32(a, b uint32) uint32 {
 
 func signbit32(x uint32) bool {
 	return x&(1<<31) != 0
+}
+
+func abs32(x float32) float32 {
+	if x >= 0.0 {
+		return x
+	}
+	return x * (-1.0)
 }
