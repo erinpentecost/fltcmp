@@ -6,12 +6,11 @@ import (
 	"math"
 )
 
-// AlmostEqual tells you how close two floats are.
-// Make maxUlpsDiff 1 if they need be really, really close.
-func AlmostEqual(a, b float64, maxUlpsDiff uint64) bool {
+// FloatDiff finds the ULP difference between two floats.
+func FloatDiff(a, b float64) uint64 {
 	// Exact case short-circuit.
 	if a == b {
-		return true
+		return 0
 	}
 
 	// Convert to ints
@@ -21,11 +20,18 @@ func AlmostEqual(a, b float64, maxUlpsDiff uint64) bool {
 	// Fail when signs are different?
 	if signbit64(uA) != signbit64(uB) {
 		// Just try again after shifting everything.
-		return AlmostEqual(math.Abs(a)+math.Abs(b), 0.0, maxUlpsDiff)
+		return FloatDiff(math.Abs(a)+math.Abs(b), 0.0)
 	}
 
 	// Find difference in ULPs.
-	ulpsDiff := diff64(uA, uB)
+	return diff64(uA, uB)
+}
+
+// AlmostEqual tells you how close two floats are.
+// Make maxUlpsDiff 1 if they need be really, really close.
+// Returns true if the ULP is within the threshold.
+func AlmostEqual(a, b float64, maxUlpsDiff uint64) bool {
+	ulpsDiff := FloatDiff(a, b)
 	return ulpsDiff <= maxUlpsDiff
 }
 
@@ -40,12 +46,11 @@ func signbit64(x uint64) bool {
 	return x&(1<<63) != 0
 }
 
-// AlmostEqual32 tells you how close two float32s are.
-// Make maxUlpsDiff 1 if they need be really, really close.
-func AlmostEqual32(a, b float32, maxUlpsDiff uint32) bool {
+// FloatDiff32 finds the ULP difference between two floats.
+func FloatDiff32(a, b float32) uint32 {
 	// Exact case short-circuit.
 	if a == b {
-		return true
+		return 0
 	}
 
 	// Convert to ints
@@ -55,11 +60,18 @@ func AlmostEqual32(a, b float32, maxUlpsDiff uint32) bool {
 	// Fail when signs are different?
 	if signbit32(uA) != signbit32(uB) {
 		// Just try again after shifting everything.
-		return AlmostEqual32(abs32(a)+abs32(b), 0.0, maxUlpsDiff)
+		return FloatDiff32(abs32(a)+abs32(b), 0.0)
 	}
 
 	// Find difference in ULPs.
-	ulpsDiff := diff32(uA, uB)
+	return diff32(uA, uB)
+}
+
+// AlmostEqual32 tells you how close two floats are.
+// Make maxUlpsDiff 1 if they need be really, really close.
+// Returns true if the ULP is within the threshold.
+func AlmostEqual32(a, b float32, maxUlpsDiff uint32) bool {
+	ulpsDiff := FloatDiff32(a, b)
 	return ulpsDiff <= maxUlpsDiff
 }
 

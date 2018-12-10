@@ -57,3 +57,9 @@ func TestCases(t *testing.T) {
 		c.Test(t)
 	}
 }
+
+func TestExample(t *testing.T) {
+	nearZero := 8.881784197001252e-16
+	distance := fltcmp.FloatDiff(nearZero, 0.0)
+	assert.Equal(t, uint64(4382002437431492608), distance)
+}
