@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/erinpentecost/fltcmp"
+	"github.com/erinpentecost/fltcmp/fltassert"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -62,4 +63,9 @@ func TestDiff(t *testing.T) {
 	nearZero := 8.881784197001252e-16
 	distance := fltcmp.FloatDiff(nearZero, 0.0)
 	assert.Equal(t, uint64(4382002437431492608), distance)
+}
+
+func TestAssert(t *testing.T) {
+	fltassert.Equal32(t, 394769.0, 394769.0, 1, "assertion32")
+	fltassert.Equal(t, 394769.0, 394769.0, 1, "assertion64")
 }
