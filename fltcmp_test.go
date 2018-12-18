@@ -2,6 +2,7 @@ package fltcmp_test
 
 import (
 	"fmt"
+	"math"
 	"testing"
 
 	"github.com/erinpentecost/fltcmp"
@@ -68,4 +69,39 @@ func TestDiff(t *testing.T) {
 func TestAssert(t *testing.T) {
 	fltassert.Equal32(t, 394769.0, 394769.0, 1, "assertion32")
 	fltassert.Equal(t, 394769.0, 394769.0, 1, "assertion64")
+}
+
+// Prevent compiler from optimizing away
+var dumbResult bool
+
+// BenchmarkAlmostEqualDifferent tests AlmostEqual with different values.
+func BenchmarkAlmostEqualDifferent(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		dumbResult = fltcmp.AlmostEqual(70367023.969698, 70367023.999698, 100)
+	}
+}
+
+// BenchmarkAlmostEqualSame tests AlmostEqual with same values.
+func BenchmarkAlmostEqualSame(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		dumbResult = fltcmp.AlmostEqual(70367023.969698, 70367023.969698, 100)
+	}
+}
+
+func epsilonEqual(a, b float64) bool {
+	return math.Abs(a-b) <= 1e-10
+}
+
+// BenchmarkEpsilonSame does a stereotypical constant epsilon test.
+func BenchmarkEpsilonSame(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		dumbResult = epsilonEqual(70367023.969698, 70367023.999698)
+	}
+}
+
+// BenchmarkEpsilonDifferent does a stereotypical constant epsilon test.
+func BenchmarkEpsilonDifferent(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		dumbResult = epsilonEqual(70367023.969698, 70367023.969698)
+	}
 }

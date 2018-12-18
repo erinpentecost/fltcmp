@@ -31,8 +31,7 @@ func FloatDiff(a, b float64) uint64 {
 // Make maxUlpsDiff 1 if they need be really, really close.
 // Returns true if the ULP is within the threshold.
 func AlmostEqual(a, b float64, maxUlpsDiff uint64) bool {
-	ulpsDiff := FloatDiff(a, b)
-	return ulpsDiff <= maxUlpsDiff
+	return FloatDiff(a, b) <= maxUlpsDiff
 }
 
 func diff64(a, b uint64) uint64 {
@@ -71,8 +70,7 @@ func FloatDiff32(a, b float32) uint32 {
 // Make maxUlpsDiff 1 if they need be really, really close.
 // Returns true if the ULP is within the threshold.
 func AlmostEqual32(a, b float32, maxUlpsDiff uint32) bool {
-	ulpsDiff := FloatDiff32(a, b)
-	return ulpsDiff <= maxUlpsDiff
+	return FloatDiff32(a, b) <= maxUlpsDiff
 }
 
 func diff32(a, b uint32) uint32 {
