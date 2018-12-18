@@ -13,8 +13,8 @@ When you test for float equality, you typically aren't looking for an *exact* ma
 It's slow.
 
 ```sh
-BenchmarkAlmostEqualDifferent-8         300000000                4.58 ns/op
-BenchmarkAlmostEqualSame-8              500000000                3.86 ns/op
+BenchmarkAlmostEqualDifferent-8         300000000                4.11 ns/op
+BenchmarkAlmostEqualSame-8              300000000                3.98 ns/op
 BenchmarkEpsilonSame-8                  2000000000               0.30 ns/op
-BenchmarkEpsilonDifferent-8             2000000000               0.31 ns/op
+BenchmarkEpsilonDifferent-8             2000000000               0.30 ns/op
 ```

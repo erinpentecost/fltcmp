@@ -8,17 +8,12 @@ import (
 
 // FloatDiff finds the ULP difference between two floats.
 func FloatDiff(a, b float64) uint64 {
-	// Exact case short-circuit.
-	if a == b {
-		return 0
-	}
-
 	// Convert to ints
 	uA := math.Float64bits(a)
 	uB := math.Float64bits(b)
 
 	// Fail when signs are different?
-	if signbit64(uA) != signbit64(uB) {
+	if uA&(1<<63) != uB&(1<<63) {
 		// Just try again after shifting everything.
 		return FloatDiff(math.Abs(a)+math.Abs(b), 0.0)
 	}
@@ -41,23 +36,14 @@ func diff64(a, b uint64) uint64 {
 	return b - a
 }
 
-func signbit64(x uint64) bool {
-	return x&(1<<63) != 0
-}
-
 // FloatDiff32 finds the ULP difference between two floats.
 func FloatDiff32(a, b float32) uint32 {
-	// Exact case short-circuit.
-	if a == b {
-		return 0
-	}
-
 	// Convert to ints
 	uA := math.Float32bits(a)
 	uB := math.Float32bits(b)
 
 	// Fail when signs are different?
-	if signbit32(uA) != signbit32(uB) {
+	if uA&(1<<31) != uB&(1<<31) {
 		// Just try again after shifting everything.
 		return FloatDiff32(abs32(a)+abs32(b), 0.0)
 	}
@@ -78,10 +64,6 @@ func diff32(a, b uint32) uint32 {
 		return a - b
 	}
 	return b - a
-}
-
-func signbit32(x uint32) bool {
-	return x&(1<<31) != 0
 }
 
 func abs32(x float32) float32 {
